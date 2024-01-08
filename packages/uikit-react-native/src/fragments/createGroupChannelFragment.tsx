@@ -102,7 +102,9 @@ const createGroupChannelFragment = (initModule?: Partial<GroupChannelModule>): G
     });
 
     const onBlurFragment = () => {
-      return Promise.allSettled([playerService.reset(), recorderService.reset()]);
+      // return Promise.allSettled([playerService.reset(), recorderService.reset()]);
+      const promises = [playerService.reset(), recorderService.reset()];
+      return Promise.all(promises.map((promise) => promise.then(value => ({ status: 'fulfilled', value }), reason => ({ status: 'rejected', reason }))));
     };
     const _onPressHeaderLeft = useFreshCallback(async () => {
       await onBlurFragment();

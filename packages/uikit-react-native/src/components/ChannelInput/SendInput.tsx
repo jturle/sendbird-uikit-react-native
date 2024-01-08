@@ -197,7 +197,9 @@ const SendInput = forwardRef<RNTextInput, SendInputProps>(function SendInput(
             onClose={onClose}
             onDismiss={() => {
               onDismiss();
-              Promise.allSettled([playerService.reset(), recorderService.reset()]);
+              // Promise.allSettled([playerService.reset(), recorderService.reset()]);
+              const promises = [playerService.reset(), recorderService.reset()];
+              Promise.all(promises.map((promise) => promise.then(value => ({ status: 'fulfilled', value }), reason => ({ status: 'rejected', reason }))));
             }}
             backgroundStyle={{ justifyContent: 'flex-end' }}
             visible={voiceMessageInputVisible}
